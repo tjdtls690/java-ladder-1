@@ -8,13 +8,14 @@ import java.util.stream.IntStream;
 
 public class OutputView {
     private static final int PER_NAME_SPACE = 6;
+    private static final String LINE_SEPARATOR = System.lineSeparator();
     
     private OutputView() {
         throw new IllegalStateException("인스턴스를 생성할 수 없는 유틸클래스입니다.");
     }
     
     public static void printNames(PlayerNames playerNames) {
-        println(System.lineSeparator() + parseDisplayElements(parsePlayerNames(playerNames)));
+        println(LINE_SEPARATOR + parseDisplayElements(parsePlayerNames(playerNames)));
     }
     
     private static List<String> parsePlayerNames(PlayerNames playerNames) {
@@ -28,25 +29,25 @@ public class OutputView {
                 .mapToObj(nameIndex -> parseDisplayName(names, nameIndex))
                 .collect(Collectors.joining());
     }
-
+    
     private static String parseDisplayName(List<String> names, int nameIndex) {
         if (nameIndex == 0) {
             return names.get(nameIndex);
         }
         return String.format("%6s", names.get(nameIndex));
     }
-
+    
     public static void printLadder(Ladder ladder, int firstNameLength) {
         println(parseLadder(ladder, firstNameLength));
     }
-
+    
     private static String parseLadder(Ladder ladder, int firstNameLength) {
         return ladder.getLines().stream()
                 .map(OutputView::parseLine)
                 .map(lineDisplay -> lineDisplay.substring(PER_NAME_SPACE - firstNameLength))
-                .collect(Collectors.joining(System.lineSeparator()));
+                .collect(Collectors.joining(LINE_SEPARATOR));
     }
-
+    
     private static String parseLine(Line line) {
         return line.getLine().stream()
                 .map(OutputView::parseBar)
@@ -73,14 +74,14 @@ public class OutputView {
         List<String> names = parsePlayerNames(playerNames);
         List<GameResult> sortedGameResults = gameResults.getSortedGameResults(movedPositions);
         
-        println(System.lineSeparator() + "실행 결과");
+        println(LINE_SEPARATOR + "실행 결과");
         println(parseAllPlayerResult(names, sortedGameResults));
     }
     
     private static String parseAllPlayerResult(List<String> names, List<GameResult> gameResults) {
         return IntStream.range(0, names.size())
                 .mapToObj(playerIndex -> parsePlayerResult(playerIndex, names, gameResults))
-                .collect(Collectors.joining(System.lineSeparator()));
+                .collect(Collectors.joining(LINE_SEPARATOR));
     }
     
     private static String parsePlayerResult(int playerIndex, List<String> names, List<GameResult> gameResults) {
@@ -89,7 +90,7 @@ public class OutputView {
     }
     
     public static void printOnePlayerResult(int playerIndex, List<Integer> movedPositions, GameResults gameResults) {
-        println(System.lineSeparator() + "실행 결과");
+        println(LINE_SEPARATOR + "실행 결과");
         
         GameResult gameResult = gameResults.getGameResult(playerIndex, movedPositions);
         println(gameResult.getGameResult());
